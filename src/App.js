@@ -1,11 +1,16 @@
 import logo from './logo.svg';
-import './App.css';
+import Navbar from './navbar.js';
+import DisplayItems from './displayItems';
+
 
 function App() {
   return (
-    <div className="App">
-       <h3> Smart Shopping</h3>
-    </div>
+    <>
+      <Navbar />
+      <DisplayItems />
+    </>
+    
+    
   );
 }
 
