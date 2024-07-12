@@ -5,10 +5,10 @@ import DisplayItems from './displayItems';
 
 function App() {
   return (
-    <>
+    <div style ={{display: "flex"}}>
       <Navbar />
       <DisplayItems />
-    </>
+    </div>
     
     
   );

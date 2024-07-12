@@ -1,3 +1,27 @@
+/* Navbar Styles */
+
+.navHeader{
+  display:flex;
+  flex-direction: column;
+}
+.motto{
+  color:orange;
+  display:flex;
+  flex-direction: column;
+  writing-mode:vertical-lr;
+}
+
+.bag{
+  height:40px;
+  color:blue;
+  margin-top: 20px;
+  margin-bottom:30px;
+  margin-left:20px;
+  width:30px;
+}
+/* Display Items Styles */
+
+
 .itemsCard{
   box-shadow: 0 2px 5px;
   width:600px;
@@ -13,4 +37,8 @@
 }
 .titleImg{
   margin-bottom: 15px;;
+}
+
+.totalPrice{
+  text-align:end
 }
