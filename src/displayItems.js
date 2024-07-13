@@ -1,46 +1,92 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useReducer} from 'react';
 import items from './shoppingItems.js';
 import { FaChevronUp, FaChevronDown,  FaShoppingBag  } from 'react-icons/fa';
 import styles from './app.module.css';
 import { useGlobalContext } from './context.js';
 
+
+
+const cartReducer = (state, action) => {
+        
+    switch(action.type){
+        case 'increase':
+           return state.map(item => 
+                item.id === action.id ? {...item, amount:item.amount+1}: item
+            );
+        
+        case 'decrease':
+            return state.map(item => 
+                
+                item.id === action.id ? {...item, amount:Math.max(0,item.amount-1)}:item
+            ).filter(item => item.amount > 0);
+        
+        case 'remove':
+            return state.filter(item => item.id != action.id);
+
+        case 'clearAll':
+            return [];
+
+        default:
+            return state
+    }
+}
+
+
 function DisplayItems(){
     const [totalPrice, setTotalPrice] = useState('')
-    const [shopItems, setShopItems]= useState(items);
-    const {clearAll, handleGlobalIncrease, handleGlobalDecrease, totalCartItems} = useGlobalContext();
+    // const [shopItems, setShopItems]= useState(items);
+    const {clearAll, totalCartItems,handleGlobalIncrease, handleGlobalDecrease} = useGlobalContext();
+
+    const [shopItems, dispatch] = useReducer(cartReducer, items);
+
 
     const clear = useRef(null);
     const itemsRef = useRef(null);
 
     const handleClearAll = () => {
         clearAll();
-        console.log(itemsRef.current);
+        dispatch({type:'clearAll'})
     }
+
     const handleIncrease = (id) => {
         handleGlobalIncrease();
-        setShopItems((prevItems) => 
-             prevItems.map(item => 
-                item.id === id ? {...item, amount: item.amount + 1}: item
-            )
-        )
+        dispatch({type: 'increase', id})
     }
 
     const handleDecrease = (id) => {
-        handleGlobalDecrease();
-        setShopItems((prevItems) => {
-            return (
-                prevItems.map(item => item.id === id ? {...item, amount: item.amount - 1}: item).filter(item => item.amount > 0)
-            )
-        })
+        handleGlobalDecrease()
+        dispatch({type:'decrease', id})
     }
 
-
-    function handleRemove(id){
-        handleGlobalDecrease();
-        console.log("handle Remove is Going Fast");
-        setShopItems((prevItems) => 
-        prevItems.filter(cart => cart.id != id ))
+    const handleRemove = (id) => {
+        handleGlobalDecrease()
+        dispatch({type:'remove', id})
     }
+    // const handleIncrease = (id) => {
+    //     handleGlobalIncrease();
+    //     setShopItems((prevItems) => 
+    //          prevItems.map(item => 
+    //             item.id === id ? {...item, amount: item.amount + 1}: item
+    //         )
+    //     )
+    // }
+
+    // const handleDecrease = (id) => {
+    //     handleGlobalDecrease();
+    //     setShopItems((prevItems) => {
+    //         return (
+    //             prevItems.map(item => item.id === id ? {...item, amount: item.amount - 1}: item).filter(item => item.amount > 0)
+    //         )
+    //     })
+    // }
+
+
+    // function handleRemove(id){
+    //     handleGlobalDecrease();
+    //     console.log("handle Remove is Going Fast");
+    //     setShopItems((prevItems) => 
+    //     prevItems.filter(cart => cart.id != id ))
+    // }
 
     useEffect(() => {
         if(totalCartItems < 1){
