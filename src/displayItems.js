@@ -5,30 +5,24 @@ import styles from './app.module.css';
 import { useGlobalContext } from './context.js';
 
 
-
-const cartReducer = (state, action) => {
-        
+const cartHandler = (state, action) => {
     switch(action.type){
-        case 'increase':
-           return state.map(item => 
-                item.id === action.id ? {...item, amount:item.amount+1}: item
-            );
-        
-        case 'decrease':
+        case 'INCREASE':
             return state.map(item => 
-                
-                item.id === action.id ? {...item, amount:Math.max(0,item.amount-1)}:item
-            ).filter(item => item.amount > 0);
-        
-        case 'remove':
-            return state.filter(item => item.id != action.id);
+                item.id === action.id ? {...item, amount:item.amount + 1}: item
+            )
+        case 'DECREASE':
+            return state.map(item => 
+                item.id === action.id ? {...item, amount:Math.max(0, item.amount -1)}:item
+            ).filter(item => item.amount > 0)
 
-        case 'clearAll':
-            return [];
-
-        default:
-            return state
-    }
+        case 'REMOVE':
+            return state.filter(item =>
+                item.id != action.id   
+            )
+        case 'CLEAR_ALL':
+            return []
+    }   
 }
 
 
@@ -37,56 +31,31 @@ function DisplayItems(){
     // const [shopItems, setShopItems]= useState(items);
     const {clearAll, totalCartItems,handleGlobalIncrease, handleGlobalDecrease} = useGlobalContext();
 
-    const [shopItems, dispatch] = useReducer(cartReducer, items);
-
+    const [shopItems, dispatch] = useReducer(cartHandler, items)
 
     const clear = useRef(null);
     const itemsRef = useRef(null);
 
-    const handleClearAll = () => {
-        clearAll();
-        dispatch({type:'clearAll'})
-    }
-
     const handleIncrease = (id) => {
         handleGlobalIncrease();
-        dispatch({type: 'increase', id})
+        dispatch({type: 'INCREASE', id})
     }
 
     const handleDecrease = (id) => {
         handleGlobalDecrease()
-        dispatch({type:'decrease', id})
+        dispatch({type:'DECREASE', id})
     }
 
     const handleRemove = (id) => {
         handleGlobalDecrease()
-        dispatch({type:'remove', id})
+        dispatch({type:'REMOVE', id})
     }
-    // const handleIncrease = (id) => {
-    //     handleGlobalIncrease();
-    //     setShopItems((prevItems) => 
-    //          prevItems.map(item => 
-    //             item.id === id ? {...item, amount: item.amount + 1}: item
-    //         )
-    //     )
-    // }
-
-    // const handleDecrease = (id) => {
-    //     handleGlobalDecrease();
-    //     setShopItems((prevItems) => {
-    //         return (
-    //             prevItems.map(item => item.id === id ? {...item, amount: item.amount - 1}: item).filter(item => item.amount > 0)
-    //         )
-    //     })
-    // }
-
-
-    // function handleRemove(id){
-    //     handleGlobalDecrease();
-    //     console.log("handle Remove is Going Fast");
-    //     setShopItems((prevItems) => 
-    //     prevItems.filter(cart => cart.id != id ))
-    // }
+    
+    const handleClearAll = (id) => {
+        clearAll();
+        dispatch({type:'CLEAR_ALL', id})
+    }
+   
 
     useEffect(() => {
         if(totalCartItems < 1){
@@ -108,7 +77,7 @@ function DisplayItems(){
     return(
         <div className={styles.section}>
             <h1 className={styles.topFace} > YOUR CHOICE YOUR HAPPINESS</h1>
-            <h3 className={styles.totalPrice}> Total Price {totalPrice} </h3>
+            <h3 className={styles.totalPrice}> Total Price ${totalPrice} </h3>
             
                 <div className={styles.itemsCard} ref={itemsRef}>
                     {shopItems.map(item => {
@@ -118,7 +87,7 @@ function DisplayItems(){
 
                                     <img  src={item.img} alt={item.title} width="80px" height="60px" />
                                     <h4 className={styles.itemTitle}>{item.title} </h4>
-                                    <p className={styles.itemPrice}>{item.price}</p>
+                                    <p className={styles.itemPrice}> ${item.price}</p>
                                     <button onClick={(e) => handleRemove(item.id)}> remove </button>
                                 
                                 </div>

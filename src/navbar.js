@@ -17,7 +17,7 @@ const Navbar = () => {
     return (
         <div className={navStyles.navbarSlide}>
                 <div className={navStyles.navHeader}>
-                    <span className={navStyles.totalCarts}>{totalCartItems}</span>
+                    <span className={navStyles.totalCarts}>{totalCartItems}<span style={{fontSize:"12px"}}>items</span></span>
                     <button className={navStyles.bag}> <FaShoppingBag /></button>
                     <h1 className={navStyles.motto}> Smart Shop </h1>
                     
