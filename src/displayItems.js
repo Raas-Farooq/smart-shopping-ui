@@ -77,15 +77,13 @@ function DisplayItems(){
     return(
         <div className={styles.section}>
             <h1 className={styles.topFace} > YOUR CHOICE YOUR HAPPINESS</h1>
-            <h3 className={styles.totalPrice}> Total Price ${totalPrice} </h3>
-            
                 <div className={styles.itemsCard} ref={itemsRef}>
                     {shopItems.map(item => {
                         return (
                             <div className={styles.singleItem} key={item.id} id={item.id}>
                                 <div key={item.id} className={styles.titleImg}>
 
-                                    <img  src={item.img} alt={item.title} width="80px" height="60px" />
+                                    <img  src={item.img} alt={item.title} width="80px" height="50px" />
                                     <h4 className={styles.itemTitle}>{item.title} </h4>
                                     <p className={styles.itemPrice}> ${item.price}</p>
                                     <button onClick={(e) => handleRemove(item.id)}> remove </button>
@@ -104,7 +102,8 @@ function DisplayItems(){
                     })}
                     
                 </div>
-                <div>
+                <div className={styles.footer}>
+                <h3 className={styles.totalPrice}> Total ${totalPrice} </h3>
                     <button ref={clear} className={styles.clearAll} onClick={handleClearAll} > ClearAll </button>
                 </div>
         </div>
